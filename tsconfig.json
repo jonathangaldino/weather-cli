@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "allowUnreachableCode": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": false,
+    "skipLibCheck": true,
+    "outDir": "build"
+  },
+  
+  "watchOptions": {
+    "excludeDirectories": ["**/node_modules", "**/build"]
+  },
+  "include": [ "src/**/*.ts"],
+  "exclude": ["**/node_modules", "**/build"]
+}

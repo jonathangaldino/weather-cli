@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "extends": ["prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn"
+  }
+}
