@@ -12,7 +12,7 @@ Open Weather is the API we're using to get weather information from a given loca
 
 ## Development
 
-Read DEVELOPING.md for more detailed information.
+Read DEVELOPMENT.md for more detailed information.
 
 ## Contributing
 
