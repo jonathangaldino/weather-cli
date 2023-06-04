@@ -18,18 +18,23 @@ async function main() {
 
   switch (cmd) {
     case 'today':
-      const todayFn = await (await import('./commands/today')).default
+      const todayFn = (await import('./commands/today')).default
       todayFn(args)
       break
 
     case 'version':
-      const versionFn = await (await import('./commands/version')).default
+      const versionFn = (await import('./commands/version')).default
       versionFn(args)
       break
 
     case 'help':
-      const helpFn = await (await import('./commands/help')).default
+      const helpFn = (await import('./commands/help')).default
       helpFn(args)
+      break
+
+    case 'config':
+      const configureFn = (await import('./commands/config')).default
+      configureFn(args)
       break
 
     default:
