@@ -35,14 +35,14 @@ export function createUserSettings(settings: Partial<UserSettings>): void {
   })
 }
 
-export async function readUserSettings(): Promise<UserSettings> {
+export async function readUserSettings(): Promise<UserSettings | null> {
   let data
 
   try {
     data = await readFile(userSettingsFilePath, 'utf-8')
   } catch (err) {
     console.error('Error reading from user settings file')
-    return
+    return null
   }
 
   try {
@@ -51,7 +51,6 @@ export async function readUserSettings(): Promise<UserSettings> {
     const userSettings = UserSettigsSchema.parse(userData)
     return userSettings
   } catch (err) {
-    console.error('Error parsing user settings stored', err)
-    throw err
+    return null
   }
 }
