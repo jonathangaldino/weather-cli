@@ -7,7 +7,6 @@ import {
   UserSettigsSchema,
   UserSettings,
   createUserSettings,
-  readUserSettings,
 } from '../utils/user-settings'
 
 async function promptConfigurationQuestions() {
@@ -129,8 +128,4 @@ export default async (args: ParsedArgs) => {
   const userSettings = await validateSettings(promptResponses)
 
   createUserSettings(userSettings)
-
-  const A = await readUserSettings()
-
-  console.log(A)
 }

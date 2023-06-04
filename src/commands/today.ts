@@ -2,6 +2,7 @@ import { ParsedArgs } from 'minimist'
 import { z } from 'zod'
 import getGeocoding from '../utils/geocoding'
 import getLocationByIp from '../utils/location'
+import { UserSettings, readUserSettings } from '../utils/user-settings'
 import getWeather from '../utils/weather'
 
 const TodayArgsSchema = z.object({
@@ -10,30 +11,53 @@ const TodayArgsSchema = z.object({
 
 type T = z.infer<typeof TodayArgsSchema> & ParsedArgs
 
-export default async (args: T) => {
-  try {
-    let lat, lon: number
+function parseLocationArgs(args: T) {
+  const [city, state, country] = args.location.split(',')
 
+  return {
+    city: city.trim(),
+    state: state.trim(),
+    country: country.trim(),
+  }
+}
+
+export default async (args: T) => {
+  let userSettings: UserSettings = {
+    location: {},
+    language: undefined,
+  }
+
+  try {
     if (args.location) {
-      const [city, state, country] = args.location.split(',')
+      const locationArgs = parseLocationArgs(args)
       const geocoding = await getGeocoding(
-        city.trim(),
-        state.trim(),
-        country.trim()
+        locationArgs.city,
+        locationArgs.state,
+        locationArgs.country
       )
 
-      lat = geocoding.lat
-      lon = geocoding.lon
+      userSettings.location.lat = geocoding.lat
+      userSettings.location.lon = geocoding.lon
     } else {
+      userSettings = await readUserSettings()
+      console.log('Using your configuration.')
+    }
+
+    const hasGeoPosition =
+      userSettings.location.lat && userSettings.location.lon
+
+    if (!hasGeoPosition) {
       const location = await getLocationByIp()
-      lat = location.latitude
-      lon = location.longitude
+      userSettings.location.lat = location.latitude
+      userSettings.location.lon = location.longitude
 
       printLocation(location)
     }
 
-    const weather = await getWeather(lat, lon)
-
+    const weather = await getWeather(
+      userSettings.location.lat,
+      userSettings.location.lon
+    )
     printWeather(weather)
   } catch (err) {
     console.error(err)
