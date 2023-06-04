@@ -9,3 +9,5 @@ You're gonna need:
 2. Create an account in IP API
 3. Copy the .env.example file to a new file called .env
 4. Put the API keys of both service inside.
+
+P.s: if you want to call `outside` from anywhere in your computer, make sure to run `$ npm link`
