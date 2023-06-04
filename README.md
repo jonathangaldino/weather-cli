@@ -40,6 +40,23 @@ Temperature (celsius):: min is 15.99 - max is 18.97 - current: 18.97 - feels lik
 The humidity is 94%
 ```
 
+### Configuring your location
+
+```bash
+$ outside config
+
+Welcome to outside!
+✔ What is the name of your city? … Rio de Janeiro
+✔ What is the state code of your city? … RJ
+✔ What is the code of your country? … BR
+✔ Which language do you speak? (use the code: pt_br, en, pt, es) … pt_br
+Fetching geocoding [Rio de Janeiro, RJ, BR]
+✔ We will be using -22.9110137 and -43.2093727 as latitude and longitude. Is that ok? … yes
+User settings saved successfully
+```
+
+**You can provide your own latitude and longitude if ours is not accurate.**
+
 ## Contributing
 
 Follow the guidelines described in CONTRIBUTING.md
