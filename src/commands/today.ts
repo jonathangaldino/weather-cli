@@ -1,11 +1,32 @@
 import { ParsedArgs } from 'minimist'
-import getLocationByIp from '../utils/location'
+import { z } from 'zod'
+import getGeocoding from '../utils/geocoding'
 import getWeather from '../utils/weather'
 
-export default async (args: ParsedArgs) => {
+const TodayArgsSchema = z.object({
+  location: z.string().optional(),
+})
+
+type T = z.infer<typeof TodayArgsSchema> & ParsedArgs
+
+export default async (args: T) => {
   try {
-    const location = await getLocationByIp()
-    const weather = await getWeather(location.latitude, location.longitude)
+    let lat, lon: number
+
+    // const location = await getLocationByIp()
+    if (args.location) {
+      const [city, state, country] = args.location.split(',')
+      const geocoding = await getGeocoding(
+        city.trim(),
+        state.trim(),
+        country.trim()
+      )
+
+      lat = geocoding.lat
+      lon = geocoding.lon
+    }
+
+    const weather = await getWeather(lat, lon)
 
     printWeather(weather)
   } catch (err) {

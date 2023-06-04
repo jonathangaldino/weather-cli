@@ -32,11 +32,6 @@ async function main() {
       helpFn(args)
       break
 
-    case 'forecast':
-      const forecastFn = await (await import('./commands/forecast')).default
-      forecastFn(args)
-      break
-
     default:
       error(`"${cmd}" is not a valid command!`, true)
       break

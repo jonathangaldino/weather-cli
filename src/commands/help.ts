@@ -11,7 +11,7 @@ const menus = {
   today: `
     outside today <options>
 
-    --location, -l ..... the location to use`,
+    --location ..... the location to use -> format: city,state code,country`,
 
   forecast: `
     outside forecast <options>
