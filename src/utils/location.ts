@@ -4,6 +4,7 @@ import env from './env'
 
 const Location = z.object({
   region_name: z.string(),
+  country_name: z.string(),
   city: z.string(),
   latitude: z.number(),
   longitude: z.number(),
@@ -21,7 +22,8 @@ export default async function getLocationByIp() {
 
   return {
     city: data.city,
-    region: data.region_name,
+    state: data.region_name,
+    country: data.country_name,
     latitude: data.latitude,
     longitude: data.longitude,
   }
