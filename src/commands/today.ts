@@ -21,6 +21,19 @@ function parseLocationArgs(args: T) {
   }
 }
 
+function printWeather(weather: Awaited<ReturnType<typeof getWeather>>) {
+  console.log(
+    `Temperature (celsius):: min is ${weather.temp_min} - max is ${weather.temp_max} - current: ${weather.temp} - feels like ${weather.feels_like}`
+  )
+  console.log(`The humidity is ${weather.humidity}%`)
+}
+
+function printLocation(location: Awaited<ReturnType<typeof getLocationByIp>>) {
+  console.log(
+    `Location: ${location.city}, ${location.state}, ${location.country}`
+  )
+}
+
 export default async (args: T) => {
   let userSettings: UserSettings = {
     location: {},
@@ -39,8 +52,12 @@ export default async (args: T) => {
       userSettings.location.lat = geocoding.lat
       userSettings.location.lon = geocoding.lon
     } else {
-      userSettings = await readUserSettings()
-      console.log('Using your configuration.')
+      const cachedSettings = await readUserSettings()
+
+      if (cachedSettings) {
+        userSettings = cachedSettings
+        console.log('Using your configuration.')
+      }
     }
 
     const hasGeoPosition =
@@ -62,17 +79,4 @@ export default async (args: T) => {
   } catch (err) {
     console.error(err)
   }
-}
-
-function printWeather(weather: Awaited<ReturnType<typeof getWeather>>) {
-  console.log(
-    `Temperature (celsius):: min is ${weather.temp_min} - max is ${weather.temp_max} - current: ${weather.temp} - feels like ${weather.feels_like}`
-  )
-  console.log(`The humidity is ${weather.humidity}%`)
-}
-
-function printLocation(location: Awaited<ReturnType<typeof getLocationByIp>>) {
-  console.log(
-    `Location: ${location.city}, ${location.state}, ${location.country}`
-  )
 }

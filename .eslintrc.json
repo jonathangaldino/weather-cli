@@ -1,7 +1,10 @@
 {
   "root": true,
+  "env": {
+    "jest/globals": true
+  },
   "extends": ["prettier"],
-  "plugins": ["prettier"],
+  "plugins": ["jest","prettier"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn"
   }
