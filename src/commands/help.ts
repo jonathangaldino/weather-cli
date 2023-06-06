@@ -12,7 +12,8 @@ const menus = {
   today: `
     outside today <options>
 
-    --location ..... the location to use -> format: city,state code,country`,
+    --location=<location> ..... the <location> to use -> format: city,state code,country
+    --unit=<unit> ......... use <unit> as unit of measurement. -> choose between "metric" for celsius, "standard" for kelvin and "imperial for fahrenheit. default is metric`,
 
   forecast: `
     outside forecast <options>
