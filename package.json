@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "tsc --watch",
+    "build": "rm -rf build && tsc",
     "test": "jest"
   },
   "keywords": [
