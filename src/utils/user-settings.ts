@@ -15,6 +15,7 @@ export const UserSettigsSchema = z
       })
       .required(),
     language: z.string().optional(),
+    unit: z.string().optional(),
   })
   .required()
 
@@ -41,8 +42,12 @@ export async function readUserSettings(): Promise<UserSettings | null> {
   try {
     data = await readFile(userSettingsFilePath, 'utf-8')
   } catch (err) {
-    console.error('Error reading from user settings file')
-    return null
+    if (err.code === 'ENOENT') {
+      return null
+    } else {
+      console.error('Error reading from user settings file', err)
+      throw err
+    }
   }
 
   try {
