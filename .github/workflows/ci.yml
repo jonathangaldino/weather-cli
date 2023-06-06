@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies with pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6.0.2
+          version: 8.6.0
           run_install: |
             - recursive: true
 
