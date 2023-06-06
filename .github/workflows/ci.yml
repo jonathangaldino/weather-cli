@@ -35,6 +35,10 @@ jobs:
     name: Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    env:
+      OPEN_WEATHER_API_KEY: 'whatever'
+      IP_API_ACCESS_TOKEN: 'whatever'
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
