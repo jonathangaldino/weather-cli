@@ -31,3 +31,31 @@ jobs:
 
       - name: Pnpm Build
         run: pnpm build
+  test:
+    name: Test
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      OPEN_WEATHER_API_KEY: 'whatever'
+      IP_API_ACCESS_TOKEN: 'whatever'
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.6.0
+
+      - name: Install dependencies with pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.0
+          run_install: |
+            - recursive: true
+
+      - name: Pnpm test
+        run: pnpm test
