@@ -1,3 +1,4 @@
+import { UNITS, Unit } from '../locale/units'
 import * as GetGeocoding from '../utils/geocoding'
 import * as GetLocation from '../utils/location'
 import * as UserConfig from '../utils/user-settings'
@@ -82,5 +83,83 @@ describe('Today Command', () => {
     })
 
     expect(getLocationByIpSpy).toHaveBeenCalled()
+  })
+
+  it.each(UNITS)(
+    'fetch todays weather using ____ as unit',
+    async (unit: Unit) => {
+      const userSettings = {
+        location: {
+          city: 'Rio de Janeiro',
+          state: 'RJ',
+          country: 'BR',
+          lat: 30,
+          lon: 30,
+        },
+        language: 'pt_br',
+      } satisfies UserConfig.UserSettings
+
+      jest
+        .spyOn(UserConfig, 'readUserSettings')
+        .mockResolvedValueOnce(userSettings)
+
+      const getWeatherSpy = jest
+        .spyOn(GetWeather, 'default')
+        .mockResolvedValueOnce({
+          humidity: 90,
+          feels_like: 30,
+          temp: 20,
+          temp_max: 30,
+          temp_min: 10,
+        })
+
+      await today({
+        _: [],
+        unit: unit,
+      })
+
+      expect(getWeatherSpy).toHaveBeenCalledWith({
+        lat: userSettings.location.lat,
+        lon: userSettings.location.lon,
+        unit: unit,
+      })
+    }
+  )
+
+  it('should use default unit if unit argument is not provided', async () => {
+    const userSettings = {
+      location: {
+        city: 'Rio de Janeiro',
+        state: 'RJ',
+        country: 'BR',
+        lat: 30,
+        lon: 30,
+      },
+      language: 'pt_br',
+    } satisfies UserConfig.UserSettings
+
+    jest
+      .spyOn(UserConfig, 'readUserSettings')
+      .mockResolvedValueOnce(userSettings)
+
+    const getWeatherSpy = jest
+      .spyOn(GetWeather, 'default')
+      .mockResolvedValueOnce({
+        humidity: 90,
+        feels_like: 30,
+        temp: 20,
+        temp_max: 30,
+        temp_min: 10,
+      })
+
+    await today({
+      _: [],
+    })
+
+    expect(getWeatherSpy).toHaveBeenCalledWith({
+      lat: userSettings.location.lat,
+      lon: userSettings.location.lon,
+      unit: 'metric',
+    })
   })
 })

@@ -41,9 +41,23 @@ async function promptConfigurationQuestions() {
       validate: (value) =>
         LANGUAGES.includes(value) ? true : 'Language code not found',
     },
+    {
+      type: 'select',
+      name: 'unit',
+      message: 'Pick a unit of measurement',
+      choices: [
+        {
+          title: 'Celsius',
+          value: 'metric',
+        },
+        { title: 'Kelvin', value: 'standard' },
+        { title: 'Fahrenheit', value: 'imperial' },
+      ],
+      initial: 1,
+    },
   ]
 
-  const { city, state, country, language } = await prompts(questions)
+  const { city, state, country, language, unit } = await prompts(questions)
 
   const location = await getGeocoding(city, state, country)
 
@@ -90,6 +104,7 @@ async function promptConfigurationQuestions() {
     lat: isLocationCorrect ? location.lat : lat,
     lon: isLocationCorrect ? location.lon : lon,
     language,
+    unit,
   }
 }
 
@@ -100,6 +115,7 @@ async function validateSettings({
   lat,
   lon,
   language,
+  unit,
 }: Awaited<ReturnType<typeof promptConfigurationQuestions>>) {
   let userSettings: UserSettings
 
@@ -113,6 +129,7 @@ async function validateSettings({
         lon,
       },
       language,
+      unit,
     })
   } catch (err) {
     console.error(err)

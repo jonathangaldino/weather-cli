@@ -6,12 +6,14 @@ const menus = {
 
     today .............. show weather for today
     version ............ show package version
-    help ............... show help menu for a command`,
+    help ............... show help menu for a command
+    config ............. configure your settings (location, language & more)`,
 
   today: `
     outside today <options>
 
-    --location ..... the location to use -> format: city,state code,country`,
+    --location=<location> ..... the <location> to use -> format: city,state code,country
+    --unit=<unit> ......... use <unit> as unit of measurement. -> choose between "metric" for celsius, "standard" for kelvin and "imperial for fahrenheit. default is metric`,
 
   forecast: `
     outside forecast <options>
