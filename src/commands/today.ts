@@ -1,25 +1,20 @@
 import { ParsedArgs } from 'minimist'
 import { z } from 'zod'
+import error from '../utils/error'
 import getGeocoding from '../utils/geocoding'
 import getLocationByIp from '../utils/location'
 import { UserSettings, readUserSettings } from '../utils/user-settings'
 import getWeather from '../utils/weather'
 
-const TodayArgsSchema = z.object({
+const todayArgSchema = z.object({
   location: z.string().optional(),
+  units: z
+    .enum(['metric', 'standard', 'imperial'])
+    .optional()
+    .default('metric'),
 })
 
-type T = z.infer<typeof TodayArgsSchema> & ParsedArgs
-
-function parseLocationArgs(args: T) {
-  const [city, state, country] = args.location.split(',')
-
-  return {
-    city: city.trim(),
-    state: state.trim(),
-    country: country.trim(),
-  }
-}
+export type TodayArguments = ParsedArgs & z.infer<typeof todayArgSchema>
 
 function printWeather(weather: Awaited<ReturnType<typeof getWeather>>) {
   console.log(
@@ -34,19 +29,38 @@ function printLocation(location: Awaited<ReturnType<typeof getLocationByIp>>) {
   )
 }
 
-export default async (args: T) => {
+function parseTodayArguments(args: TodayArguments) {
+  try {
+    const parsedArgs = todayArgSchema.parse(args)
+    const [city, state, country] = args.location.split(',')
+
+    return {
+      location: {
+        city: city.trim(),
+        state: state.trim(),
+        country: country.trim(),
+      },
+      units: parsedArgs.units,
+    }
+  } catch (err) {
+    error(err.message, true)
+  }
+}
+
+export default async (args: TodayArguments) => {
+  const features = parseTodayArguments(args)
+
   let userSettings: UserSettings = {
     location: {},
     language: undefined,
   }
 
   try {
-    if (args.location) {
-      const locationArgs = parseLocationArgs(args)
+    if (features.location) {
       const geocoding = await getGeocoding(
-        locationArgs.city,
-        locationArgs.state,
-        locationArgs.country
+        features.location.city,
+        features.location.state,
+        features.location.country
       )
 
       userSettings.location.lat = geocoding.lat
@@ -71,10 +85,11 @@ export default async (args: T) => {
       printLocation(location)
     }
 
-    const weather = await getWeather(
-      userSettings.location.lat,
-      userSettings.location.lon
-    )
+    const weather = await getWeather({
+      lat: userSettings.location.lat,
+      lon: userSettings.location.lon,
+    })
+
     printWeather(weather)
   } catch (err) {
     console.error(err)
