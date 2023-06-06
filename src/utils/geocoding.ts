@@ -19,8 +19,6 @@ export default async function getGeocoding(
   state: string,
   country: string
 ) {
-  console.log(`Fetching geocoding [${city}, ${state}, ${country}]`)
-
   const q = `${city},${state},${country}`
 
   const { data } = await axios.get<GeocingResponse>(
