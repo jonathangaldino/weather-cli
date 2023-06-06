@@ -6,7 +6,8 @@ const menus = {
 
     today .............. show weather for today
     version ............ show package version
-    help ............... show help menu for a command`,
+    help ............... show help menu for a command
+    config ............. configure your settings (location, language & more)`,
 
   today: `
     outside today <options>
