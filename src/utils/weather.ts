@@ -18,9 +18,24 @@ const WeatherSchema = z
 
 type WeatherResponse = z.infer<typeof WeatherSchema>
 
-export default async function getWeather(lat: number, lon: number) {
+const WeatherOptions = z
+  .object({
+    lat: z.number(),
+    lon: z.number(),
+    unit: z
+      .enum(['metric', 'imperial', 'standard'])
+      .optional()
+      .default('metric'),
+  })
+  .required()
+
+export default async function getWeather({
+  lat,
+  lon,
+  unit,
+}: z.infer<typeof WeatherOptions>) {
   const { data } = await axios.get<WeatherResponse>(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${env.OPEN_WEATHER_API_KEY}`
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${env.OPEN_WEATHER_API_KEY}`
   )
 
   return {
